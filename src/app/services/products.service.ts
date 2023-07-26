@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { retry } from 'rxjs/operators';
+import { HttpClient, HttpParams, HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
+import { retry, catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 
 import { Product, CreateProductDTO, UpdateProductDTO } from './../models/product.model';
 
@@ -30,7 +31,18 @@ export class ProductsService {
   }
 
   getProduct(id: string) {
-    return this.http.get<Product>(`${this.apiUrl}/${id}`);
+    return this.http.get<Product>(`${this.apiUrl}/${id}`)
+    .pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === HttpStatusCode.Conflict) {
+          return throwError('Ups algo esta fallando status conflict');
+        }
+        if (error.status === 404) {
+          return throwError('Ups No encontrado status 404');
+        }
+        return throwError('Ups algo salio malisimo');
+      })
+    )
   }
 
   getProductsByPage(limit: number, offset: number) {
