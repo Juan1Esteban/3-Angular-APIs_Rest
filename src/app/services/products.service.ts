@@ -4,12 +4,14 @@ import { retry } from 'rxjs/operators';
 
 import { Product, CreateProductDTO, UpdateProductDTO } from './../models/product.model';
 
+import { environment } from './../../environments/environment';
+
 @Injectable({
   providedIn: 'root'
 })
 export class ProductsService {
 
-  private apiUrl: string = '/api/products';
+  private apiUrl: string = `${environment.API_URL}/api/products`;
 
   constructor(
     private http: HttpClient
