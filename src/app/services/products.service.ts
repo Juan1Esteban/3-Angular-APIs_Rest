@@ -9,7 +9,7 @@ import { Product, CreateProductDTO, UpdateProductDTO } from './../models/product
 })
 export class ProductsService {
 
-  private apiUrl: string = 'https://young-sands-07814.herokua.com/api/products';
+  private apiUrl: string = '/api/products';
 
   constructor(
     private http: HttpClient
